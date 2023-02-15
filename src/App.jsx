@@ -4,16 +4,22 @@ function App() {
   const [value, setValue] = useState('')
   const [variables, setVariables] = useState([])
   useEffect(()=>{
-   setVariables([...variables, value])
+   setVariables(prevVariables=>[...prevVariables, value].filter(x=>x!==''))
   },[value])
+  const calculate=()=>{
+    const values = variables.join('').split(/[\+\-\\\*]/g);
+    const operand = variables.join('').spilt.split(/\d/g);
+    console.log(values)
+    console.log(operand)
+  }
   return (
     
   <div className='max-w-md mx-auto text-4xl font-bold h-[80vh] mt-8 '>
    <div className='bg-[#7B7A89] text-white text-left h-24 py-6'>
-    <p className='text-right'>{variables}</p>
+    <p className='text-right'>{Array.isArray(variables)?!variables.length?0:variables:variables}</p>
    </div>
    <div className='grid grid-cols-4 h-full'>
-   <button value='AC' onClick={event=>setVariables('')} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>AC</button>
+   <button value='AC' onClick={event=>setVariables([])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>AC</button>
    <button value='+/-' onClick={event=>setValue(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>+/-</button>
    <button value='%' onClick={event=>setValue(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>%</button>
    <button value='/' onClick={event=>setValue(event.target.value)} className='text-black inline-flex justify-center items-center bg-[#F48637] border border-black'>/</button>
@@ -31,7 +37,7 @@ function App() {
    <button value='+' onClick={event=>setValue(event.target.value)} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>+</button>
    <button value={0} onClick={event=>setValue(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center col-span-2 border border-black'>0</button>
    <button value='.' onClick={event=>setValue(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>.</button>
-   <button value='=' onClick={()=>setVariables(eval(variables.join('')))} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>=</button>
+   <button value='=' onClick={()=>{calculate();setVariables(eval(variables.join('')))}} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>=</button>
    </div>
   </div>
   );
