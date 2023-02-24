@@ -1,44 +1,37 @@
 import React, {useState, useEffect, useRef} from 'react';
+const math = require('mathjs');
 
 function App() {
-  const [value, setValue] = useState([]);
   const [result, setResult] = useState(0);
+  const [operand, setOperand] = useState('+');
   const [first, setFirst] = useState(0);
-  const [operand, setOperand] = useState('');
-  const oper = useRef('')
-  useEffect(() => {
-      if(!oper.current){
-     setFirst(value.join(''));
-     setValue([]);
-  }
-  else if(result){
+  const [value, setValue] = useState([])
+  const onMount = useRef(false)
+  const oper = useRef()
+  useEffect(()=>{
+    if(onMount.current){
+      console.log(first, +value.join(''))
+    setResult(calculate(+first, +value.join(''), oper.current))
+    oper.current=operand;
     setFirst(result);
-  }
-  else{
-    console.log('h' ,+first, +value.join(''), oper.current)
-    calculate(+first, +value.join(''), oper.current)
-  }
-  if(['*','/','+','-'].includes(operand)){
-  oper.current = operand;}
-    console.log(oper.current);
-    setFirst(value.join(''))
-    if(!result){
-     
+    console.log("there", result);
+    }
+    else{
+      onMount.current=true;
     }
   },[operand])
-  useEffect(() => {})
-  function calculate(a1,a2,op){
-    if(op === '+'){
-      setResult(a1+a2)
-    }
-    if(op === '-'){
-      setResult(a1-a2)
-    }
-    if(op === '*'){
-      setResult(a1*a2)
-    }
-    if(op === '/'){
-      setResult(a1/a2)
+  const calculate =(first, second, operand)=>{
+    switch(operand){
+      case '+':
+        return first+second
+      case '-':
+        return first-second
+      case '*':
+        return first*second
+      case '/':
+        return first/second
+      default:
+        return 0
     }
   }
   return(
@@ -47,25 +40,27 @@ function App() {
     <p className='text-right'>{!result?value.length?value:0:result}</p>
    </div>
    <div className='grid grid-cols-4 h-full'>
-   <button value='AC' onClick={event=>{setValue([]); setResult(0);}} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>AC</button>
-   <button value='+/-' onClick={event=>console.log(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>+/-</button>
-   <button value='%' onClick={event=>console.log(event.target.value)} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>%</button>
-   <button value='/' onClick={event=>setOperand(event.target.value)} className='text-black inline-flex justify-center items-center bg-[#F48637] border border-black'>/</button>
-   <button value={7} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>7</button>
-   <button value={8} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>8</button>
-   <button value={9} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>9</button>
-   <button value='*' onClick={event=>setOperand(event.target.value)} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>X</button>
-   <button value={4} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>4</button>
-   <button value={5} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>5</button>
-   <button value={6} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>6</button>
-   <button value='-' onClick={event=>setOperand(event.target.value)} className='text-black inline-flex justify-center items-center bg-[#F48637] border border-black'>-</button>
-   <button value={1} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>1</button>
-   <button value={2} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>2</button>
-   <button value={3} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>3</button>
-   <button value='+' onClick={event=>setOperand(event.target.value)} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>+</button>
-   <button value={0} onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center col-span-2 border border-black'>0</button>
-   <button value='.' onClick={event=>setValue([...value, event.target.value])} className='text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black'>.</button>
-   <button value='=' onClick={event=>setOperand(event.target.value)} className='text-black  inline-flex justify-center items-center bg-[#F48637] border border-black'>=</button>
+{    [
+      {id: 1, value: 'AC'},
+      {id: 2, value: '+/-'},
+      {id: 3, value: '%'},
+      {id: 4, value: '/'},
+      {id: 5, value: 7},
+      {id: 6, value: 8},
+      {id: 7, value: 9},
+      {id: 8, value: '*'},
+      {id: 9, value: 4},
+      {id: 10, value: 5},
+      {id: 11, value: 6},
+      {id: 12, value: '-'},
+      {id: 13, value: 1},
+      {id: 14, value: 2},
+      {id: 15, value: 3},
+      {id: 16, value: '+'},
+      {id: 17, value: 0},
+      {id: 18, value: '.'},
+      {id: 19, value: '='}].map((item, index)=><button key={index} value={item.value}  onClick={event=>{ if(event.target.value=="=") {setValue([math.evaluate(value.join(""))])} else {setValue(prev=>prev.concat(event.target.value))}}} className={`text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black ${item.id==17&&"col-span-2"} ${[ 4,8,12,16,19].includes(item.id)&&"bg-[#F48637]"}`}>{item.value}</button>)
+    }
    </div>
   </div>
   );
