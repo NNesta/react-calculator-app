@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import data from "./data";
 
-function App() {
+const App = () => {
   const [first, setFirst] = useState(null);
   const [second, setSecond] = useState("");
   const [prev, setPrev] = useState(null);
-  const [sign, setSign] = useState("+");
 
-  const calculate = (op) => {
+  const calculate = (operator) => {
     if (prev === null || first === null) {
       setFirst(+second);
       setSecond("");
-      setPrev(op);
+      setPrev(operator);
       return;
     }
     switch (prev) {
@@ -27,10 +26,15 @@ function App() {
       case "/":
         setFirst(first / Number(second));
         break;
+      case "%":
+        setFirst(second / 100);
+        break;
       case "=":
         break;
+      default:
+        setFirst(0);
     }
-    setPrev(op);
+    setPrev(operator);
     setSecond("");
   };
   const handleClick = (event) => {
@@ -75,7 +79,7 @@ function App() {
             value={item.value}
             onClick={handleClick}
             className={`text-black bg-[#DCDBDC] inline-flex justify-center items-center border border-black ${
-              item.id == 17 && "col-span-2"
+              item.id === 17 && "col-span-2"
             } ${[4, 8, 12, 16, 19].includes(item.id) && "bg-[#F48637]"}`}
           >
             {item.value}
@@ -84,6 +88,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
